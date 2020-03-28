@@ -8,12 +8,14 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      timeSecond: 0
+      timeSecond: 0,
+      isStart: false,
+      records: []
     };
   }
 
   render() {
-    const { timeSecond } = this.state;
+    const { timeSecond, records } = this.state;
 
     //화면에 떠야할 timesecond를 스테이트에서 가져옴
 
@@ -22,15 +24,28 @@ class App extends React.Component {
         <div className="timerBox__time">
           <span>{timeSecond}</span>
         </div>
-        <div className="timerBox__record"></div>
+        <div className="timerBox__record">
+          <ul>
+            {records.map((re, index) => {
+              return <li key={index}>{re}</li>;
+            })}
+          </ul>
+        </div>
         <div className="timerBox__btn">
           <input type="button" value="START" onClick={this._startTimer} />
           <input type="button" value="STOP" onClick={this._stopTimer} />
-          <input type="button" value="RECORD" />
+          <input type="button" value="RECORD" onClick={this._record} />
+          <input type="button" value="INIT" onClick={this._recordInit} />
         </div>
       </div>
     );
   }
+
+  _recordInit = () => {
+    this.setState({
+      records: []
+    });
+  };
 
   _startTimer = () => {
     const { isStart } = this.state;
@@ -59,6 +74,15 @@ class App extends React.Component {
       isStart: false
     });
   };
-}
 
+  _record = () => {
+    const { isStart, records } = this.state;
+
+    if (isStart) {
+      records.push(this.state.timeSecond);
+    } else {
+      return;
+    }
+  };
+}
 export default App;
